@@ -14,7 +14,7 @@ jobs:
       
     - name: Add Reviewers
       env:
-        REVIEWERS: Eashwarsai, AnanthulaShravya  # Add your reviewers here
+        REVIEWERS: Eashwarsai  # Add your reviewers here
       run: |
         REVIEWERS_ARRAY=(${REVIEWERS//,/ })
         PR_NUMBER=$(jq -r '.pull_request.number' "$GITHUB_EVENT_PATH")
