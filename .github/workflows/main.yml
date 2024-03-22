@@ -14,10 +14,10 @@ jobs:
 
     - name: Add reviewers
       run: |
-        TOKEN=${{ secrets.GITHUB_TOKEN }}
+        TOKEN=${{ secrets.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 }}  # Replace PAT_TOKEN with your Personal Access Token
         PR_NUMBER=$(jq -r ".pull_request.number" "$GITHUB_EVENT_PATH")
         REPO=$(jq -r ".repository.full_name" "$GITHUB_EVENT_PATH")
-        REVIEWERS='["Eashwarsai", "AnanthulaShravya"]'  # Add your desired reviewers here
+        REVIEWERS='["reviewer1", "reviewer2"]'  # Add your desired reviewers here
 
         curl -X POST \
           -H "Authorization: token $TOKEN" \
