@@ -1,29 +1,29 @@
-name: Add Reviewers to Pull Request
+name: Add Reviews to Pull Request
+
 on:
   pull_request:
     types: [opened]
 
 jobs:
-  add_reviewers:
+  add_reviews:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
-
-      - name: Add reviewers
-        run: |
-          # Get the pull request number
-          PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-
-          # Add your logic to determine reviewers based on contributors, branches, etc.
-          # For demonstration purposes, let's add two reviewers (replace with your logic)
-          REVIEWER_1="Eashwarsai"
-          REVIEWER_2="AnanthulaShravya"
-
-          # Add reviewers to the pull request
-          echo "Adding reviewers to PR #$PR_NUMBER"
-          curl -X POST \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/$PR_NUMBER/requested_reviewers" \
-            -d "{\"reviewers\": [\"$REVIEWER_1\", \"$REVIEWER_2\"]}"
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Add Reviewers
+      uses: actions/github-script@v4
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const { owner, repo } = context.repo;
+          const pr_number = context.payload.pull_request.number;
+          const reviewers = ["Eashwarsai", "AnanthulaShravya"] ; // Add your reviewers here
+          for (const reviewer of reviewers) {
+            await github.pulls.createReviewRequest({
+              owner,
+              repo,
+              pull_number: pr_number,
+              reviewers: [reviewer]
+            });
+          }
