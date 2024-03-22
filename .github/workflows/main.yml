@@ -7,23 +7,21 @@ on:
 jobs:
   add_reviews:
     runs-on: ubuntu-latest
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
       
     - name: Add Reviewers
-      uses: actions/github-script@v4
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const { owner, repo } = context.repo;
-          const pr_number = context.payload.pull_request.number;
-          const reviewers = ["Eashwarsai", "AnanthulaShravya"] ; // Add your reviewers here
-          for (const reviewer of reviewers) {
-            await github.pulls.createReviewRequest({
-              owner,
-              repo,
-              pull_number: pr_number,
-              reviewers: [reviewer]
-            });
-          }
+      env:
+        REVIEWERS: Eashwarsai, AnanthulaShravya  # Add your reviewers here
+      run: |
+        REVIEWERS_ARRAY=(${REVIEWERS//,/ })
+        PR_NUMBER=$(jq -r '.pull_request.number' "$GITHUB_EVENT_PATH")
+        for reviewer in "${REVIEWERS_ARRAY[@]}"; do
+          curl -X POST \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/requested_reviewers" \
+            -d "{\"reviewers\": [\"$reviewer\"]}"
+        done
