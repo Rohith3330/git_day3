@@ -1,0 +1,30 @@
+name: Auto Add Reviewers
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  add-reviewers:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Add reviewers
+      uses: actions/github-script@v4
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const owner = context.payload.repository.owner.login;
+          const repo = context.payload.repository.name;
+          const pr_number = context.payload.pull_request.number;
+          const reviewers = ['reviewer1', 'reviewer2']; // Add your desired reviewers here
+          const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
+          octokit.pulls.requestReviewers({
+            owner: owner,
+            repo: repo,
+            pull_number: pr_number,
+            reviewers: reviewers
+          });
