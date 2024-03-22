@@ -20,7 +20,7 @@ jobs:
         PR_NUMBER=$(jq -r '.pull_request.number' "$GITHUB_EVENT_PATH")
         for reviewer in "${REVIEWERS_ARRAY[@]}"; do
           curl -X POST \
-            -H "Authorization: token ${{ secrets.PAT }}" \
+            -H "Authorization: token ${{ secrets.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}}" \
             -H "Accept: application/vnd.github.v3+json" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/requested_reviewers" \
             -d "{\"reviewers\": [\"$reviewer\"]}"
