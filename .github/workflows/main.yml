@@ -1,0 +1,26 @@
+name: Auto Add Reviewers
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  add-reviewers:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Add reviewers
+      run: |
+        TOKEN=${{ secrets.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 }}
+        PR_NUMBER=$(jq -r ".pull_request.number" "$GITHUB_EVENT_PATH")
+        REPO=$(jq -r ".repository.full_name" "$GITHUB_EVENT_PATH")
+        REVIEWERS='["Eashwarsai", "AnanthulaShravya"]' # Add your desired reviewers here
+
+        curl -X POST \
+          -H "Authorization: token $TOKEN" \
+          -H "Accept: application/vnd.github.v3+json" \
+          -d "{\"reviewers\": $REVIEWERS}" \
+          "https://api.github.com/repos/$REPO/pulls/$PR_NUMBER/requested_reviewers"
