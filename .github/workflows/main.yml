@@ -12,3 +12,5 @@ jobs:
       with:
         token: ${{ secrets.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 }}
         reviewers: Eashwarsai
+        re-request-when-approved: true
+        re-request-when-changes-requested: true
