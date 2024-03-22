@@ -12,5 +12,3 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         reviewers: Eashwarsai
-        re-request-when-approved: true
-        re-request-when-changes-requested: true
