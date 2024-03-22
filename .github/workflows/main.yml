@@ -1,16 +1,16 @@
-name: "Set Issue Label and Assignee"
+name: Add Reviewers
+
 on:
-  issues:
-    types: [opened]
   pull_request:
-    types: [opened]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: Naturalclar/issue-action@v2.0.2
-        with:
-          title-or-body: "both"
-          parameters: {"keywords": ["help", "guidance"], "labels": ["help-wanted"], "assignees": ["Eashwarsai"]}
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
+    - name: Add Reviewers
+      uses: madrapps/add-reviewers@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        reviewers: Eashwarsai
+        re-request-when-approved: true
+        re-request-when-changes-requested: true
