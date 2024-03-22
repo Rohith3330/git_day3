@@ -14,13 +14,13 @@ jobs:
       
     - name: Add Reviewers
       env:
-        REVIEWERS: Eashwarsai  # Add your reviewers here
+        REVIEWERS: Eashwarsai # Add your reviewers here
       run: |
         REVIEWERS_ARRAY=(${REVIEWERS//,/ })
         PR_NUMBER=$(jq -r '.pull_request.number' "$GITHUB_EVENT_PATH")
         for reviewer in "${REVIEWERS_ARRAY[@]}"; do
           curl -X POST \
-            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Authorization: token ${{ secrets.PAT }}" \
             -H "Accept: application/vnd.github.v3+json" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/requested_reviewers" \
             -d "{\"reviewers\": [\"$reviewer\"]}"
