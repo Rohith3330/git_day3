@@ -10,5 +10,5 @@ jobs:
     - name: Add Reviewers
       uses: madrapps/add-reviewers@v1
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.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 }}
         reviewers: Eashwarsai
